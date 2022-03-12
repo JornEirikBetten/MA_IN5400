@@ -51,9 +51,9 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         loss = criterion(prediction, target)
         loss.backward()
         optimizer.step()
-        losses.append(loss)
+        losses.append(Tensor.cpu(loss).detach().numpy())
 
-    losses = Tensor.cpu(losses)
+
     return np.mean(losses)
 
 
