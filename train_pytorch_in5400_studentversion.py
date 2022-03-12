@@ -44,6 +44,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         # If you are using the TwoNetworks class you will need to copy the infrared
         # channel before feeding it into your model.
         optimizer.zero_grad()
+        data = data.to(device)
         target = data['label']
         prediction = model(data['image'])
         prediction = activation(prediction)
@@ -62,7 +63,6 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
     model.eval()
     curcount = 0
     accuracy = 0
-    dataloader = dataloader.to(device)
 
 
 
