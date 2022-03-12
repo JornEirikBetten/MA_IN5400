@@ -44,9 +44,9 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         # If you are using the TwoNetworks class you will need to copy the infrared
         # channel before feeding it into your model.
         optimizer.zero_grad()
-        data = data.to(device)
+        inputs = data['image'].to(device)
         target = data['label']
-        prediction = model(data['image'])
+        prediction = model(inputs)
         prediction = activation(prediction)
         loss = criterion(prediction, target)
         loss.backward()
