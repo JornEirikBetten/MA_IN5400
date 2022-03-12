@@ -53,7 +53,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         optimizer.step()
         losses.append(loss)
 
-
+    losses = Tensor.cpu(losses)
     return np.mean(losses)
 
 
