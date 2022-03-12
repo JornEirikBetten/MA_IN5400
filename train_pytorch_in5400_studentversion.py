@@ -62,7 +62,7 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
     model.eval()
     curcount = 0
     accuracy = 0
-
+    dataloader = dataloader.to(device)
 
 
 
@@ -107,7 +107,8 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
 
   best_measure = 0
   best_epoch =-1
-
+  dataloader_train = dataloader_train.to(device)
+  dataloader_test = dataloader_test.to(device)
   trainlosses=[]
   testlosses=[]
   testperfs=[]
@@ -174,11 +175,7 @@ def runstuff():
 
   # This is a dataset property.
   config['numcl'] = 17
-  # Device
-  if True == config['use_gpu']:
-      device= torch.device('cuda:0')
-  else:
-      device= torch.device('cpu')
+
 
   # Data augmentations.
   data_transforms = {
@@ -213,9 +210,14 @@ def runstuff():
   # Dataloaders
   #TODO use num_workers=1
   dataloaders = {}
-  dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True).to(device)
-  dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False).to(device)
+  dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True)
+  dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False)
 
+  # Device
+  if True == config['use_gpu']:
+      device= torch.device('cuda:0')
+  else:
+      device= torch.device('cpu')
   # Model
   # TODO create an instance of the network that you want to use.
   pretrained_net = resnet18(pretrained=True)# TwoNetworks()
