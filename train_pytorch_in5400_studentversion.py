@@ -45,7 +45,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         # channel before feeding it into your model.
         optimizer.zero_grad()
         inputs = data['image'].to(device)
-        target = data['label']
+        target = data['label'].to(device)
         prediction = model(inputs)
         prediction = activation(prediction)
         loss = criterion(prediction, target)
