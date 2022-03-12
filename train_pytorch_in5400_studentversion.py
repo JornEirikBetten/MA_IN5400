@@ -54,7 +54,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         losses.append(loss)
 
 
-    return torch.mean(losses)
+    return np.mean(losses)
 
 
 def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
