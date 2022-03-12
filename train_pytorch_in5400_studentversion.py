@@ -107,8 +107,6 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
 
   best_measure = 0
   best_epoch =-1
-  dataloader_train = dataloader_train.to(device)
-  dataloader_test = dataloader_test.to(device)
   trainlosses=[]
   testlosses=[]
   testperfs=[]
