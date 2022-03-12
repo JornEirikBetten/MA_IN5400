@@ -197,13 +197,14 @@ def runstuff():
 
   dirname = os.getcwd()
   main_path = dirname + "/rainforest"
+  gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
   print(main_path)
   # Datasets
   image_datasets={}
   #image_datasets['train']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=0, transform=data_transforms['train'])
   #image_datasets['val']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=1, transform=data_transforms['val'])
-  image_datasets['train']=RainforestDataset(root_dir=main_path,trvaltest=0, transform=data_transforms['train'])
-  image_datasets['val']=RainforestDataset(root_dir=main_path,trvaltest=1, transform=data_transforms['val'])
+  image_datasets['train']=RainforestDataset(root_dir=gpu_path,trvaltest=0, transform=data_transforms['train'])
+  image_datasets['val']=RainforestDataset(root_dir=gpu_path,trvaltest=1, transform=data_transforms['val'])
   # Dataloaders
   #TODO use num_workers=1
   dataloaders = {}
