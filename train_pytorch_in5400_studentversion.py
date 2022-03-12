@@ -51,10 +51,10 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         loss = criterion(prediction, target)
         loss.backward()
         optimizer.step()
-        losses.append(loss.detach().numpy())
+        losses.append(loss)
 
 
-    return np.mean(losses)
+    return torch.mean(losses)
 
 
 def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
