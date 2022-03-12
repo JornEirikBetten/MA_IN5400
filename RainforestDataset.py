@@ -87,8 +87,7 @@ class RainforestDataset(Dataset):
             labels_val.append(label)
 
 
-        print("train set: ", len(labels_train))
-        print("val set: ", len(labels_val))
+
 
         if trvaltest == 0:
             self.img_filenames = imgs_train
@@ -100,7 +99,6 @@ class RainforestDataset(Dataset):
             print("trvaltest takes input 0 (train), 1 (validation).\n Try again.\n")
             exit()
 
-        print("First filename: ", self.img_filenames[0])
         """
         # TODO Binarise your multi-labels from the string. HINT: There is a useful sklearn function to
         # help you binarise from strings.
