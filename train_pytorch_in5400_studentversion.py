@@ -86,6 +86,7 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
 
           # This was an accuracy computation
           cpuout= outputs.to('cpu')
+          cpuout=np.nan_to_num(cpuout)
           preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
           corrects = np.sum([preds[i,j] == labels[i,j] for i in range(preds.shape[0]) for j in range(preds.shape[1])])
           accuracy = accuracy*( curcount/ float(curcount+labels.shape[0]) ) + float(corrects)* ( curcount/ float(curcount+labels.shape[0]) )
