@@ -174,6 +174,11 @@ def runstuff():
 
   # This is a dataset property.
   config['numcl'] = 17
+  # Device
+  if True == config['use_gpu']:
+      device= torch.device('cuda:0')
+  else:
+      device= torch.device('cpu')
 
   # Data augmentations.
   data_transforms = {
@@ -208,14 +213,8 @@ def runstuff():
   # Dataloaders
   #TODO use num_workers=1
   dataloaders = {}
-  dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True)
-  dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False)
-
-  # Device
-  if True == config['use_gpu']:
-      device= torch.device('cuda:0')
-  else:
-      device= torch.device('cpu')
+  dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True).to(device)
+  dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False).to(device)
 
   # Model
   # TODO create an instance of the network that you want to use.
@@ -223,6 +222,7 @@ def runstuff():
   model = SingleNetwork(pretrained_net)
 
   model = model.to(device)
+
 
   lossfct = yourloss()
 
