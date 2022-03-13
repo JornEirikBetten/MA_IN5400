@@ -169,7 +169,7 @@ def runstuff():
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
   config['maxnumepochs'] = 35
-  config['scheduler_stepsize'] = 10
+  config['scheduler_stepsize'] = 5
   config['scheduler_factor'] = 0.3
 
   # This is a dataset property.
