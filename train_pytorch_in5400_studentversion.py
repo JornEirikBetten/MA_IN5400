@@ -166,7 +166,7 @@ class yourloss(nn.modules.loss._Loss):
 def runstuff():
   config = dict()
   config['use_gpu'] = True #True #TODO change this to True for training on the cluster
-  config['lr'] = 0.1
+  config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
   config['maxnumepochs'] = 10

@@ -57,7 +57,7 @@ class RainforestDataset(Dataset):
         self.ending = ".tif"
 
         dlabels = pd.read_csv(self.data)
-        N = 1000
+        N = 100
         labels = []
         for i in range(N):
             tags = dlabels["tags"][i]
@@ -72,7 +72,7 @@ class RainforestDataset(Dataset):
         labels = preprocessing.binarize(labels)
         img_filenames = dlabels["image_name"][0:N] + self.ending
 
-        seed = 0
+        seed = 1
         img_train, img_val, label_train, label_val= train_test_split(img_filenames, labels, test_size=0.33, random_state=seed)
 
         imgs_train = []; imgs_val = []
