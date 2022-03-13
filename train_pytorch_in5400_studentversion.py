@@ -166,7 +166,7 @@ class yourloss(nn.modules.loss._Loss):
 def runstuff():
   config = dict()
   config['use_gpu'] = True #True #TODO change this to True for training on the cluster
-  config['lr'] = 0.01
+  config['lr'] = 0.1
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
   config['maxnumepochs'] = 10
@@ -261,6 +261,7 @@ def runstuff():
       performance_measures.append(trainlosses[epoch])
       performance_measures.append(testlosses[epoch])
       performance_measures.append(average_precision_score)
+      loss_writer.writerow(performance_measures)
 
   file_classes.close()
   file_losses.close()
