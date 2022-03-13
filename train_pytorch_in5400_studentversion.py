@@ -169,7 +169,7 @@ def runstuff():
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
-  config['maxnumepochs'] = 10
+  config['maxnumepochs'] = 1
   config['scheduler_stepsize'] = 4
   config['scheduler_factor'] = 0.3
 
