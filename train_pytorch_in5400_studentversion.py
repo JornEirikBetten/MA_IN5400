@@ -24,6 +24,7 @@ from typing import Callable, Optional
 from RainforestDataset import RainforestDataset, ChannelSelect
 from YourNetwork import SingleNetwork
 from torchvision.models import resnet18
+import csv
 
 
 activation = nn.Sigmoid()
@@ -238,6 +239,33 @@ def runstuff():
   best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
   print("Best epoch: ", best_epoch)
   print("Best measure: ", best_measure)
+
+  # Write important outputs to file
+  file_classes = open('classes_avg_scores.csv', 'w')
+  class_writer = csv.writer(file_classes)
+  header_row_classes = ['clear', 'cloudy', 'haze', 'partly_cloudy',
+             'agriculture', 'artisinal_mine', 'bare_ground', 'blooming',
+             'blow_down', 'conventional_mine', 'cultivation', 'habitation',
+             'primary', 'road', 'selective_logging', 'slash_burn', 'water']
+  class_writer.writerow(header_row_classes)
+  file_losses = open('losses_mAG.csv', 'w')
+  loss_writer = csv.writer(file_losses)
+  header_row_losses = 'training_loss,validation_loss,mean_average_score'
+  loss_writer.writerow(header_row_losses)
+
+  for epoch in range(config['maxnumepochs']):
+      test_performances_at_epoch = testperfs[epochs, :]
+      average_precision_score = np.mean(test_performances_at_epoch)
+      class_writer.writerow(test_performances_at_epoch)
+      performance_measures = []
+      performance_measures.append(trainlosses[epoch])
+      performance_measures.append(testlosses[epoch])
+      performance_measures.append(average_precision_score)
+
+  file_classes.close()
+  file_losses.close()
+
+
 
 if __name__=='__main__':
 
