@@ -250,7 +250,7 @@ def runstuff():
   class_writer.writerow(header_row_classes)
   file_losses = open('losses_mAG.csv', 'w')
   loss_writer = csv.writer(file_losses)
-  header_row_losses = 'training_loss,validation_loss,mean_average_score'
+  header_row_losses = ['training_loss','validation_loss','mean_average_score']
   loss_writer.writerow(header_row_losses)
 
   for epoch in range(config['maxnumepochs']):
