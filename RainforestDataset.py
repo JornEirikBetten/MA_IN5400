@@ -57,7 +57,7 @@ class RainforestDataset(Dataset):
         self.ending = ".tif"
 
         dlabels = pd.read_csv(self.data)
-        N = 100
+        N = 1000
         labels = []
         for i in range(N):
             tags = dlabels["tags"][i]
