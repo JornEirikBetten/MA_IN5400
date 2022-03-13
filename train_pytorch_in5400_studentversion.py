@@ -254,7 +254,7 @@ def runstuff():
   loss_writer.writerow(header_row_losses)
 
   for epoch in range(config['maxnumepochs']):
-      test_performances_at_epoch = testperfs[epoch, :]
+      test_performances_at_epoch = testperfs[epoch]
       average_precision_score = np.mean(test_performances_at_epoch)
       class_writer.writerow(test_performances_at_epoch)
       performance_measures = []
