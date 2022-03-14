@@ -259,11 +259,6 @@ def runstuff():
   best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, trainperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
   print("Best epoch: ", best_epoch)
   print("Best measure: ", best_measure)
-  print("Shape preds:, ", preds.shape)
-  print("Shabe labales: ", labels.shape)
-  print("Length fnames: ", len(fnames))
-  print("Filenames: ", fnames)
-
   # Write important outputs to file
   file_classes = open('classes_avg_scores.csv', 'w')
   class_writer = csv.writer(file_classes)
@@ -272,7 +267,7 @@ def runstuff():
              'blow_down', 'conventional_mine', 'cultivation', 'habitation',
              'primary', 'road', 'selective_logging', 'slash_burn', 'water']
   class_writer.writerow(header_row_classes)
-  file_losses = open('losses_mAG.csv', 'w')
+  file_losses = open('losses_mAP.csv', 'w')
   loss_writer = csv.writer(file_losses)
   header_row_losses = ['training_loss','validation_loss','mean_average_score']
   loss_writer.writerow(header_row_losses)
