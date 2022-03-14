@@ -53,7 +53,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         loss.backward()
         optimizer.step()
         losses.append(Tensor.cpu(loss).detach().numpy())
-        prediction = prediction.detatch().numpy()
+        prediction = prediction.detach().numpy()
         cpuout= prediction.to('cpu')
         labels = target.to('cpu')
         cpuout=np.nan_to_num(cpuout)
