@@ -265,6 +265,8 @@ def runstuff():
   best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, trainperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
   print("Best epoch: ", best_epoch)
   print("Best measure: ", best_measure)
+  # Save best weights
+  torch.save(bestweights, "./best_model.pt")
   # Write important outputs to file
   file_classes = open('classes_avg_scores.csv', 'w')
   class_writer = csv.writer(file_classes)
