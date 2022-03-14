@@ -54,7 +54,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         optimizer.step()
         losses.append(Tensor.cpu(loss).detach().numpy())
 
-        cpuout= Tensor.cpu(prediction.to('cpu').detach.numpy())
+        cpuout= prediction.to('cpu')
         labels = target.to('cpu')
         cpuout=np.nan_to_num(cpuout)
         preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
@@ -187,7 +187,7 @@ def runstuff():
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
-  config['maxnumepochs'] = 25
+  config['maxnumepochs'] = 2
   config['scheduler_stepsize'] = 5
   config['scheduler_factor'] = 0.3
 
