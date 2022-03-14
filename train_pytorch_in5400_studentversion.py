@@ -96,7 +96,8 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
           # TODO: collect scores, labels, filenames
           concat_pred = np.concatenate((concat_pred, cpuout), axis=0)
           concat_labels = np.concatenate((concat_labels, labels), axis=0)
-          fnames.append(data['filename'])
+          for fname in data['filename']:
+              fnames.append(fname)
 
     for c in range(numcl):
       avgprecs[c]= sklearn.metrics.average_precision_score(concat_labels[:, c], concat_pred[:, c])# TODO, nope it is not sklearn.metrics.precision_score
@@ -138,9 +139,12 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
       #TODO track current best performance measure and epoch
       best_measure = avgperfmeasure
       best_epoch = epoch
+      best_c_pred = concat_pred
+      best_c_lbls = concat_labels
+      names = fnames
       #TODO save your scores
 
-  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, concat_pred, concat_labels
+  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, best_c_pred, best_c_lbls, names
 
 
 class yourloss(nn.modules.loss._Loss):
@@ -164,7 +168,7 @@ class yourloss(nn.modules.loss._Loss):
 
 def runstuff():
   config = dict()
-  config['use_gpu'] = False #True #TODO change this to True for training on the cluster
+  config['use_gpu'] = True #True #TODO change this to True for training on the cluster
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
@@ -239,9 +243,13 @@ def runstuff():
   #TODO
   somelr_scheduler = torch.optim.lr_scheduler.StepLR(someoptimizer, step_size=config['scheduler_stepsize'], gamma=config['scheduler_factor'])
 
-  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, preds, labels = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
+  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
   print("Best epoch: ", best_epoch)
   print("Best measure: ", best_measure)
+  print("Shape preds:, ", preds.shape)
+  print("Shabe labales: ", labels.shape)
+  print("Length fnames: ", len(fnames))
+  print("Filenames: ", fnames)
 
   # Write important outputs to file
   file_classes = open('classes_avg_scores.csv', 'w')
@@ -268,19 +276,32 @@ def runstuff():
 
   file_classes.close()
   file_losses.close()
+  file_fnames = open('fnames.csv', 'w')
+  name_writer = csv.writer(file_fnames)
+  name_writer.writerow(["filenames"])
+
+
   file_pred = open('predictions.csv', 'w')
-  file_lbls = open('labels.csv', 'w')
   pred_writer = csv.writer(file_pred)
   pred_writer.writerow(header_row_classes)
+
+  file_lbls = open('labels.csv', 'w')
   lbls_writer = csv.writer(file_lbls)
   lbls_writer.writerow(header_row_classes)
+
   for i in range(preds.shape[0]):
       pred_row = preds[i, :]
       lbls_row = labels[i, :]
-      pred_lab_writer.writerow(pred_row)
+      filename = fnames[i]
+      pred_writer.writerow(pred_row)
       lbls_writer.writerow(lbls_row)
+      name_writer.writerow([filename])
+
   file_pred.close()
   file_lbls.close()
+  file_fnames.close()
+
+
 
 
 
