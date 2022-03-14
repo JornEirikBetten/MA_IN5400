@@ -279,6 +279,7 @@ def runstuff():
       mAP_test = np.mean(test_performances_at_epoch)
       mAP_train = np.mean(train_performances_at_epoch)
       class_writer.writerow(test_performances_at_epoch)
+      performance_measures = []
       performance_measures.append(trainlosses[epoch])
       performance_measures.append(testlosses[epoch])
       performance_measures.append(mAP_test)
