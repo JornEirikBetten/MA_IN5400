@@ -176,6 +176,7 @@ class yourloss(nn.modules.loss._Loss):
         log_pred_1 = torch.log(1-input_)
         cross_entropy_all = target*log_pred + off_target*log_pred_1
         loss = -torch.sum(cross_entropy_all)/input_.shape[0]
+        print(loss)
         return loss
 
 
