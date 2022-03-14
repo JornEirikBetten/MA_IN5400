@@ -35,7 +35,8 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
 
     #TODO model.train() or model.eval()?
     model.train(True)
-    concat_pred = np.empty((0, numcl)) 
+    numcl = 17
+    concat_pred = np.empty((0, numcl))
     concat_labels = np.empty((0, numcl))
     losses = []
     for batch_idx, data in enumerate(trainloader):
