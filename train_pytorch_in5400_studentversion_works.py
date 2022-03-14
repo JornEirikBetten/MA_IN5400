@@ -185,7 +185,7 @@ def runstuff():
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 34
-  config['maxnumepochs'] = 30
+  config['maxnumepochs'] = 1
   config['scheduler_stepsize'] = 5
   config['scheduler_factor'] = 0.3
 
