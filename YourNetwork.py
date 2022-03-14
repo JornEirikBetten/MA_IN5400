@@ -1,7 +1,29 @@
+
 import torch
 import torch.nn as nn
-#from RainforestDataset import get_classes_list
+import torch.optim as optim
+from torch.optim import lr_scheduler
 
+import torchvision
+from torchvision import datasets, models, transforms, utils
+from torch.utils.data import Dataset, DataLoader
+#import matplotlib.pyplot as plt
+
+from torch import Tensor
+
+import time
+import os
+import numpy as np
+
+import PIL.Image
+import sklearn.metrics
+from sklearn import preprocessing
+
+from typing import Callable, Optional
+#from RainforestDataset import RainforestDataset, ChannelSelect
+#rom YourNetwork import SingleNetwork
+from torchvision.models import resnet18
+import csv
 
 
 def get_classes_list():
@@ -11,7 +33,7 @@ def get_classes_list():
                'primary', 'road', 'selective_logging', 'slash_burn', 'water']
     return classes, len(classes)
 
-"""
+
 class TwoNetworks(nn.Module):
     '''
     This class takes two pretrained networks,
@@ -27,12 +49,14 @@ class TwoNetworks(nn.Module):
 
         # TODO select all parts of the two pretrained networks, except for
         # the last linear layer.
-        self.fully_conv1 =
-        self.fully_conv2 =
+        self.fully_conv1 = nn.Sequential(*(list(pretrained_net1.children())[:-1]))
+        print(self.fully_conv1)
+        self.fully_conv2 = nn.Sequential(*(list(pretrained_net2.children())[:-1]))
+        print(self.fully_conv2)
 
         # TODO create a linear layer that has in_channels equal to
         # the number of in_features from both networks summed together.
-        self.linear = nn.Linear(, num_classes)
+        self.linear = nn.Linear(pretrained_net1.fc.in_features + pretrained_net2.fc.in_features, num_classes)
 
 
     def forward(self, inputs1, inputs2):
@@ -40,9 +64,13 @@ class TwoNetworks(nn.Module):
         # of the two networks that you initialised above, and then
         # concatenate the features before the linear layer.
         # And return the result.
+        net1 = self.fully_conv1(inputs1)
+        net2 = self.fully_conv2(inputs2)
 
-        return
-"""
+        net = torch.cat((net1, net2), axis=0)
+        output = self.linear(net)
+
+        return output
 
 class SingleNetwork(nn.Module):
     '''
@@ -96,3 +124,9 @@ class SingleNetwork(nn.Module):
 
     def forward(self, inputs):
         return self.net(inputs)
+
+if __name__=='__main__':
+    model1 = resnet18(pretrained=True)
+    print("Model 1: ", model1)
+    model2 = resnet18(pretrained=True)
+    model = TwoNetworks(model1, model2)

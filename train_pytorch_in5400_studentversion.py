@@ -172,7 +172,7 @@ def runstuff():
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
-  config['maxnumepochs'] = 1
+  config['maxnumepochs'] = 25
   config['scheduler_stepsize'] = 5
   config['scheduler_factor'] = 0.3
 
@@ -244,7 +244,7 @@ def runstuff():
   somelr_scheduler = torch.optim.lr_scheduler.StepLR(someoptimizer, step_size=config['scheduler_stepsize'], gamma=config['scheduler_factor'])
 
   best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
-  
+
 
   # Write important outputs to file
   file_classes = open('classes_avg_scores.csv', 'w')
