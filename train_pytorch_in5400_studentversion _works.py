@@ -35,6 +35,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
 
     #TODO model.train() or model.eval()?
     model.train(True)
+    # HAVE FUN!
     numcl = 17
     concat_pred = np.empty((0, numcl))
     concat_labels = np.empty((0, numcl))
