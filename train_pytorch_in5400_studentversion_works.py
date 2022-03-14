@@ -191,6 +191,12 @@ def runstuff():
 
   # This is a dataset property.
   config['numcl'] = 17
+  seed = 1001
+  if config['use_gpu'] == True:
+      torch.cuda.manual_seed_all(seed)
+  else:
+      torch.manual_seed_all(seed)
+
 
 
   # Data augmentations.
