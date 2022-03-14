@@ -67,7 +67,7 @@ class TwoNetworks(nn.Module):
         net1 = self.fully_conv1(inputs1)
         net2 = self.fully_conv2(inputs2)
 
-        net = torch.cat((net1, net2), axis=0)
+        net = torch.cat((net1, net2), axis=-1)
         output = self.linear(net)
 
         return output
@@ -87,7 +87,11 @@ class SingleNetwork(nn.Module):
 
         if weight_init is not None:
             current_weights = pretrained_net.conv1.weight
-            new_weights = torch.cat((current_weights, torch.randn(64, 1, 7, 7)), 1)
+            if weight_init == 'kaiming-he':
+                weights_fourth_layer = torch.empty(64, 1, 7, 7)
+            else:
+                weights_fourth_layer = torch.randn(64, 1, 7, 7)
+            new_weights = torch.cat((current_weights, weights_fourth_layer), dim=1)
 
             new_conv1 = nn.Conv2d(4, 64, kernel_size=(7,7), stride=(2,2), padding=(3,3), bias=False)
             new_conv1.weight = torch.nn.Parameter(new_weights)

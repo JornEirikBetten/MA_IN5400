@@ -54,8 +54,21 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         optimizer.step()
         losses.append(Tensor.cpu(loss).detach().numpy())
 
+        cpuout= outputs.to('cpu')
+        labels = target.to('cpu')
+        cpuout=np.nan_to_num(cpuout)
+        preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
+        corrects = np.sum([preds[i,j] == labels[i,j] for i in range(preds.shape[0]) for j in range(preds.shape[1])])
+        accuracy = accuracy*( curcount/ float(curcount+labels.shape[0]) ) + float(corrects)* ( curcount/ float(curcount+labels.shape[0]) )
+        curcount += labels.shape[0]
 
-    return np.mean(losses)
+        # TODO: collect scores, labels, filenames
+        concat_pred = np.concatenate((concat_pred, cpuout), axis=0)
+        concat_labels = np.concatenate((concat_labels, labels), axis=0)
+    for c in range(numcl):
+      avgprecs[c]= sklearn.metrics.average_precision_score(concat_labels[:, c], concat_pred[:, c])# TODO, nope it is not sklearn.metrics.precision_score
+
+    return np.mean(losses), np.nan_to_num(avgprecs)
 
 
 def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
@@ -111,6 +124,7 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
   best_measure = 0
   best_epoch =-1
   trainlosses=[]
+  trainperfs=[]
   testlosses=[]
   testperfs=[]
 
@@ -119,7 +133,8 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
     print('-' * 10)
 
 
-    avgloss=train_epoch(model,  dataloader_train,  criterion,  device , optimizer )
+    avgloss, trainmAP =train_epoch(model,  dataloader_train,  criterion,  device , optimizer )
+    trainperfs.append(trainmAP)
     trainlosses.append(avgloss)
 
     if scheduler is not None:
@@ -144,7 +159,7 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
       names = fnames
       #TODO save your scores
 
-  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, best_c_pred, best_c_lbls, names
+  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, trainperfs, best_c_pred, best_c_lbls, names
 
 
 class yourloss(nn.modules.loss._Loss):
@@ -203,7 +218,6 @@ def runstuff():
   dirname = os.getcwd()
   main_path = dirname + "/rainforest"
   gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
-  print(main_path)
 
 
   # Device
@@ -254,19 +268,21 @@ def runstuff():
              'blow_down', 'conventional_mine', 'cultivation', 'habitation',
              'primary', 'road', 'selective_logging', 'slash_burn', 'water']
   class_writer.writerow(header_row_classes)
-  file_losses = open('losses_mAG.csv', 'w')
+  file_losses = open('losses_mAP.csv', 'w')
   loss_writer = csv.writer(file_losses)
-  header_row_losses = ['training_loss','validation_loss','mean_average_score']
+  header_row_losses = ['training_loss','validation_loss','mAP_test', 'mAP_train']
   loss_writer.writerow(header_row_losses)
 
   for epoch in range(config['maxnumepochs']):
       test_performances_at_epoch = testperfs[epoch]
-      average_precision_score = np.mean(test_performances_at_epoch)
+      train_performances_at_epoch = trainperfs[epoch]
+      mAP_test = np.mean(test_performances_at_epoch)
+      mAP_train = np.mean(train_performances_at_epoch)
       class_writer.writerow(test_performances_at_epoch)
-      performance_measures = []
       performance_measures.append(trainlosses[epoch])
       performance_measures.append(testlosses[epoch])
-      performance_measures.append(average_precision_score)
+      performance_measures.append(mAP_test)
+      performance_measures.append(mAP_train)
       loss_writer.writerow(performance_measures)
 
   file_classes.close()
