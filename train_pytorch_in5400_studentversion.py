@@ -57,9 +57,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         labels = Tensor.cpu(target)
         cpuout=np.nan_to_num(cpuout)
         preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
-        #corrects = np.sum([preds[i,j] == labels[i,j] for i in range(preds.shape[0]) for j in range(preds.shape[1])])
-        #accuracy = accuracy*( curcount/ float(curcount+labels.shape[0]) ) + float(corrects)* ( curcount/ float(curcount+labels.shape[0]) )
-        #curcount += labels.shape[0]
+        
 
         # TODO: collect scores, labels, filenames
         concat_pred = np.concatenate((concat_pred, cpuout), axis=0)
