@@ -141,6 +141,7 @@ class RainforestDataset(Dataset):
         labels = self.labels[idx]
         img_filename = self.img_filenames[idx]
 
+        torch.manual_seed(idx)
         if self.transform:
             img = self.transform(img)
         else:
