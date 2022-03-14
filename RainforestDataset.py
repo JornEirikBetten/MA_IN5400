@@ -57,7 +57,7 @@ class RainforestDataset(Dataset):
         self.ending = ".tif"
 
         dlabels = pd.read_csv(self.data)
-        N = 40479
+        N = 1000
         labels = []
         for i in range(N):
             tags = dlabels["tags"][i]
@@ -139,6 +139,7 @@ class RainforestDataset(Dataset):
         img_dir = self.image_dir + self.img_filenames[idx]
         img = PIL.Image.open(img_dir)
         labels = self.labels[idx]
+        img_filename = self.img_filenames[idx]
 
         if self.transform:
             img = self.transform(img)
@@ -147,7 +148,7 @@ class RainforestDataset(Dataset):
 
         sample = {'image': img,
                   'label': labels,
-                  'filename': img_dir}
+                  'filename': img_filename}
         """"
 	    img_dir = self.image_dir + self.img_filenames[idx]
 	    img = PIL.Image.open(img_dir)

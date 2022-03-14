@@ -137,11 +137,10 @@ def traineval2_model_nocv(dataloader_train, dataloader_test ,  model ,  criterio
       bestweights= model.state_dict()
       #TODO track current best performance measure and epoch
       best_measure = avgperfmeasure
-      best_weights = model.state_dict()
       best_epoch = epoch
       #TODO save your scores
 
-  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs
+  return best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, concat_pred, concat_labels
 
 
 class yourloss(nn.modules.loss._Loss):
@@ -165,11 +164,11 @@ class yourloss(nn.modules.loss._Loss):
 
 def runstuff():
   config = dict()
-  config['use_gpu'] = True #True #TODO change this to True for training on the cluster
+  config['use_gpu'] = False #True #TODO change this to True for training on the cluster
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 32
-  config['maxnumepochs'] = 20
+  config['maxnumepochs'] = 1
   config['scheduler_stepsize'] = 5
   config['scheduler_factor'] = 0.3
 
@@ -201,23 +200,27 @@ def runstuff():
   main_path = dirname + "/rainforest"
   gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
   print(main_path)
+
+
+  # Device
+  if True == config['use_gpu']:
+      device= torch.device('cuda:0')
+      path = gpu_path
+  else:
+      device= torch.device('cpu')
+      path = main_path
   # Datasets
   image_datasets={}
   #image_datasets['train']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=0, transform=data_transforms['train'])
   #image_datasets['val']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=1, transform=data_transforms['val'])
-  image_datasets['train']=RainforestDataset(root_dir=gpu_path,trvaltest=0, transform=data_transforms['train'])
-  image_datasets['val']=RainforestDataset(root_dir=gpu_path,trvaltest=1, transform=data_transforms['val'])
+  image_datasets['train']=RainforestDataset(root_dir=path,trvaltest=0, transform=data_transforms['train'])
+  image_datasets['val']=RainforestDataset(root_dir=path,trvaltest=1, transform=data_transforms['val'])
   # Dataloaders
   #TODO use num_workers=1
   dataloaders = {}
   dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True)
   dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False)
 
-  # Device
-  if True == config['use_gpu']:
-      device= torch.device('cuda:0')
-  else:
-      device= torch.device('cpu')
   # Model
   # TODO create an instance of the network that you want to use.
   pretrained_net = resnet18(pretrained=True)# TwoNetworks()
@@ -236,7 +239,7 @@ def runstuff():
   #TODO
   somelr_scheduler = torch.optim.lr_scheduler.StepLR(someoptimizer, step_size=config['scheduler_stepsize'], gamma=config['scheduler_factor'])
 
-  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
+  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, preds, labels = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
   print("Best epoch: ", best_epoch)
   print("Best measure: ", best_measure)
 
@@ -265,6 +268,19 @@ def runstuff():
 
   file_classes.close()
   file_losses.close()
+  file_pred = open('predictions.csv', 'w')
+  file_lbls = open('labels.csv', 'w')
+  pred_writer = csv.writer(file_pred)
+  pred_writer.writerow(header_row_classes)
+  lbls_writer = csv.writer(file_lbls)
+  lbls_writer.writerow(header_row_classes)
+  for i in range(preds.shape[0]):
+      pred_row = preds[i, :]
+      lbls_row = labels[i, :]
+      pred_lab_writer.writerow(pred_row)
+      lbls_writer.writerow(lbls_row)
+  file_pred.close()
+  file_lbls.close()
 
 
 
