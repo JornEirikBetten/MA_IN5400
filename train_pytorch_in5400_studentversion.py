@@ -54,7 +54,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         optimizer.step()
         losses.append(Tensor.cpu(loss).detach().numpy())
 
-        cpuout= prediction.to('cpu').detach.numpy()
+        cpuout= Tensor.cpu(prediction.to('cpu').detach.numpy())
         labels = target.to('cpu')
         cpuout=np.nan_to_num(cpuout)
         preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
