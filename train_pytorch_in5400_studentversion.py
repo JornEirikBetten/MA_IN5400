@@ -38,6 +38,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
     numcl = 17
     concat_pred = np.empty((0, numcl))
     concat_labels = np.empty((0, numcl))
+    avgprecs=np.zeros(numcl) 
     losses = []
     for batch_idx, data in enumerate(trainloader):
         if (batch_idx %100==0) and (batch_idx>=100):
