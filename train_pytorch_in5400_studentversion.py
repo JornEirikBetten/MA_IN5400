@@ -55,14 +55,11 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         loss = criterion(prediction, target)
         loss.backward()
         optimizer.step()
-        losses.append(Tensor.cpu(loss).detach().numpy())
+        losses.append(loss.item())
         cpuout = Tensor.cpu(prediction).detach().numpy()
         labels = Tensor.cpu(target)
         cpuout=np.nan_to_num(cpuout)
         preds = preprocessing.binarize(cpuout, threshold=0.5, copy=True)
-
-
-        # TODO: collect scores, labels, filenames
         concat_pred = np.concatenate((concat_pred, cpuout), axis=0)
         concat_labels = np.concatenate((concat_labels, labels), axis=0)
     for c in range(numcl):
