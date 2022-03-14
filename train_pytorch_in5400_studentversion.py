@@ -38,7 +38,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
     numcl = 17
     concat_pred = np.empty((0, numcl))
     concat_labels = np.empty((0, numcl))
-    avgprecs=np.zeros(numcl) 
+    avgprecs=np.zeros(numcl)
     losses = []
     for batch_idx, data in enumerate(trainloader):
         if (batch_idx %100==0) and (batch_idx>=100):
@@ -257,7 +257,7 @@ def runstuff():
   #TODO
   somelr_scheduler = torch.optim.lr_scheduler.StepLR(someoptimizer, step_size=config['scheduler_stepsize'], gamma=config['scheduler_factor'])
 
-  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
+  best_epoch, best_measure, bestweights, trainlosses, testlosses, testperfs, trainperfs, preds, labels, fnames = traineval2_model_nocv(dataloaders['train'], dataloaders['val'] ,  model ,  lossfct, someoptimizer, somelr_scheduler, num_epochs= config['maxnumepochs'], device = device , numcl = config['numcl'] )
 
 
   # Write important outputs to file
