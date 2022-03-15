@@ -72,7 +72,7 @@ class RainforestDataset(Dataset):
         labels = preprocessing.binarize(labels)
         img_filenames = dlabels["image_name"][0:N] + self.ending
 
-        seed = 10101
+        seed = 1
         img_train, img_val, label_train, label_val= train_test_split(img_filenames, labels, test_size=0.33, random_state=seed)
 
         imgs_train = []; imgs_val = []
