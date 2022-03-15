@@ -50,8 +50,10 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         optimizer.zero_grad()
         inputs = data['image'].to(device)
         target = data['label'].to(device)
+        target = target.double()
         prediction = model(inputs)
         prediction = activation(prediction)
+        prediction = prediction.double()
         loss = criterion(prediction, target)
         #print(loss)
         loss.backward()
@@ -89,10 +91,10 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
           if (batch_idx%100==0) and (batch_idx>=100):
             print('at val batchindex: ', batch_idx)
 
-          inputs = data['image'].to(device)
+          inputs = data['image'].to(device).double()
           outputs = model(inputs)
           outputs = activation(outputs)
-          labels = data['label']
+          labels = data['label'].double()
           loss = criterion(outputs, labels.to(device))
           losses.append(loss.item())
 
