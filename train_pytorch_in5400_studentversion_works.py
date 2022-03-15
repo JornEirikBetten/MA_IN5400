@@ -174,7 +174,7 @@ class yourloss(nn.modules.loss._Loss):
 
     def forward(self, input_: Tensor, target: Tensor) -> Tensor:
         #TODO
-        #input_ = input_ + 1e-10
+        input_ = input_ + 1e-10
         off_target = 1-target
         log_pred = torch.log(input_)
         log_pred_1 = torch.log(1-input_)
