@@ -72,6 +72,8 @@ class TwoNetworks(nn.Module):
         net2 = self.fully_conv2(inputs2)
         print("Shape net 1: ", net1.shape)
         print("Shape net 2: ", net2.shape)
+        net1 = torch.reshape(net1, (16, 512))
+        net2 = torch.reshape(net2, (16, 512))
 
         net = torch.cat((net1, net2), axis=1)
         output = self.linear(net)
