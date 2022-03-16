@@ -49,10 +49,10 @@ def train_epoch_twoNets(model, trainloader, criterion, device, optimizer):
         # channel before feeding it into your model.
         optimizer.zero_grad()
         inputs = data['image'].to(device)
-        inputs_RGB = data['image'][16, 0:3, :, :].to(device)
+        inputs_RGB = data['image'][:, 0:3, :, :].to(device)
         print("Shape inputs_RGB: ", inputs_RGB.shape)
         print("Shape inputs: ", inputs.shape)
-        inputs_IR = data['image'][16, 3, :, :].to(device)
+        inputs_IR = data['image'][:, 3, :, :].to(device)
         target = data['label'].to(device)
         target = target.double()
         prediction = model(inputs_RGB, inputs_IR)
