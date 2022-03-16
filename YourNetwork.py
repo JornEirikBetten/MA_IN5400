@@ -57,6 +57,9 @@ class TwoNetworks(nn.Module):
 
         # TODO create a linear layer that has in_channels equal to
         # the number of in_features from both networks summed together.
+        print("pretrained_net1.fc.in_feat: ", pretrained_net1.fc.in_features)
+        print("pretrained_net2.fc.in_feat: ", pretrained_net2.fc.in_features)
+
         self.linear = nn.Linear(pretrained_net1.fc.in_features + pretrained_net2.fc.in_features, num_classes)
 
 
