@@ -607,7 +607,7 @@ def runstuff4(): # Single net, 4 channels kaiming-he
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 34
-  config['maxnumepochs'] = 1
+  config['maxnumepochs'] = 2
   config['scheduler_stepsize'] = 2
   config['scheduler_factor'] = 0.3
 
@@ -746,5 +746,5 @@ def runstuff4(): # Single net, 4 channels kaiming-he
 if __name__=='__main__':
 
   #runstuff() # Single net, 3 channels
-  #runstuff3() # Two nets, 4 channels 
+  #runstuff3() # Two nets, 4 channels
   runstuff4() # Single net, 4 channels kaiming-he initialization
