@@ -189,8 +189,8 @@ def runstuff():
   config['lr'] = 0.01
   config['batchsize_train'] = 16
   config['batchsize_val'] = 34
-  config['maxnumepochs'] = 30
-  config['scheduler_stepsize'] = 5
+  config['maxnumepochs'] = 8
+  config['scheduler_stepsize'] = 2
   config['scheduler_factor'] = 0.3
 
   # This is a dataset property.
@@ -281,7 +281,7 @@ def runstuff():
   class_writer.writerow(header_row_classes)
   file_losses = open('losses_mAP.csv', 'w')
   loss_writer = csv.writer(file_losses)
-  header_row_losses = ['training_loss','validation_loss','mean_average_score']
+  header_row_losses = ['training_loss','validation_loss','mAP_test', 'mAP_train']
   loss_writer.writerow(header_row_losses)
 
   for epoch in range(config['maxnumepochs']):
