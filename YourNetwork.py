@@ -56,9 +56,7 @@ class TwoNetworks(nn.Module):
 
 
         # TODO create a linear layer that has in_channels equal to
-        # the number of in_features from both networks summed together.
-        print("pretrained_net1.fc.in_feat: ", pretrained_net1.fc.in_features)
-        print("pretrained_net2.fc.in_feat: ", pretrained_net2.fc.in_features)
+        # the number of in_features from both networks summed together
 
         self.linear = nn.Linear(pretrained_net1.fc.in_features + pretrained_net2.fc.in_features, num_classes)
 
@@ -70,8 +68,6 @@ class TwoNetworks(nn.Module):
         # And return the result.
         net1 = self.fully_conv1(inputs1)
         net2 = self.fully_conv2(inputs2)
-        print("Shape net 1: ", net1.shape)
-        print("Shape net 2: ", net2.shape)
         net1 = torch.reshape(net1, (16, 512))
         net2 = torch.reshape(net2, (16, 512))
 
