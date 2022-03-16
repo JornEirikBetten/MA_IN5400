@@ -57,7 +57,7 @@ class RainforestDataset(Dataset):
         self.ending = ".tif"
 
         dlabels = pd.read_csv(self.data)
-        N = 40479
+        N = 1000
         labels = []
         for i in range(N):
             tags = dlabels["tags"][i]
@@ -173,13 +173,13 @@ if __name__ == "__main__":
     trainvaltest = 1
     transform = transforms.Compose([
         transforms.ToTensor(),
-        ChannelSelect(channels=[0,1,2]),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        ChannelSelect(channels=[0,1,2,3]),
+        transforms.Normalize([0.7476, 0.6534, 0.4757, 0.0960], [0.1677, 0.1828, 0.2137, 0.0284]),
     ]
     )
     dataset = RainforestDataset(root_dir=main_path, trvaltest=trainvaltest, transform=transform)
     print(dataset[0]['filename'])
-    print(dataset[0]['image'].shape)
+    print(dataset[0]['image'][0:3, :, :].shape)
     print(dataset.__len__())
-    for i in range(dataset.__len__()):
-        print(dataset[i]['filename'])
+    #for i in range(dataset.__len__()):
+    #    print(dataset[i]['filename'])

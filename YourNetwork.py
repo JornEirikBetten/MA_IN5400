@@ -50,9 +50,14 @@ class TwoNetworks(nn.Module):
         # TODO select all parts of the two pretrained networks, except for
         # the last linear layer.
         self.fully_conv1 = nn.Sequential(*(list(pretrained_net1.children())[:-1]))
-        print(self.fully_conv1)
+        #print(self.fully_conv1)
         self.fully_conv2 = nn.Sequential(*(list(pretrained_net2.children())[:-1]))
+        print(self.fully_conv2[0])
+        self.fully_conv2[0] = nn.Conv2d(1, 64, kernel_size=(7,7), stride=(2,2), padding=(3,3), bias=False)
+        print("IR - net:")
         print(self.fully_conv2)
+
+
 
         # TODO create a linear layer that has in_channels equal to
         # the number of in_features from both networks summed together.
@@ -131,6 +136,5 @@ class SingleNetwork(nn.Module):
 
 if __name__=='__main__':
     model1 = resnet18(pretrained=True)
-    print("Model 1: ", model1)
     model2 = resnet18(pretrained=True)
     model = TwoNetworks(model1, model2)
