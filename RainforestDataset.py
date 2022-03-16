@@ -180,6 +180,7 @@ if __name__ == "__main__":
     dataset = RainforestDataset(root_dir=main_path, trvaltest=trainvaltest, transform=transform)
     print(dataset[0]['filename'])
     print(dataset[0]['image'][0:3, :, :].shape)
+    print(dataset[0]['image'][3, :, :].shape)
     print(dataset.__len__())
     #for i in range(dataset.__len__()):
     #    print(dataset[i]['filename'])

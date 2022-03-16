@@ -50,12 +50,8 @@ class TwoNetworks(nn.Module):
         # TODO select all parts of the two pretrained networks, except for
         # the last linear layer.
         self.fully_conv1 = nn.Sequential(*(list(pretrained_net1.children())[:-1]))
-        #print(self.fully_conv1)
         self.fully_conv2 = nn.Sequential(*(list(pretrained_net2.children())[:-1]))
-        print(self.fully_conv2[0])
         self.fully_conv2[0] = nn.Conv2d(1, 64, kernel_size=(7,7), stride=(2,2), padding=(3,3), bias=False)
-        print("IR - net:")
-        print(self.fully_conv2)
 
 
 
