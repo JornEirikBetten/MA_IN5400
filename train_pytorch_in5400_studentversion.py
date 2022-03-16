@@ -50,8 +50,6 @@ def train_epoch_twoNets(model, trainloader, criterion, device, optimizer):
         optimizer.zero_grad()
         inputs = data['image'].to(device)
         inputs_RGB = data['image'][:, 0:3, :, :].to(device)
-        print("Shape inputs_RGB: ", inputs_RGB.shape)
-        print("Shape inputs: ", inputs.shape)
         inputs_IR = data['image'][:, 3, :, :].to(device)
         inputs_IR = torch.reshape(inputs_IR, (inputs_IR.shape[0], 1, inputs_IR.shape[1], inputs_IR.shape[2]))
         target = data['label'].to(device)
@@ -134,8 +132,9 @@ def evaluate_meanavgprecision_twoNets(model, dataloader, criterion, device, numc
           if (batch_idx%100==0) and (batch_idx>=100):
             print('at val batchindex: ', batch_idx)
 
-          inputs_RGB = data['image'][0:3, :, :].to(device).double()
-          inputs_IR = data['image'][3, :, :].to(device).double()
+          inputs_RGB = data['image'][:, 0:3, :, :].to(device).double()
+          inputs_IR = data['image'][:, 3, :, :].to(device).double()
+          inputs_IR = torch.reshape(inputs_IR, (inputs_IR.shape[0], 1, inputs_IR.shape[1], inputs_IR.shape[2]))
           outputs = model(inputs_RGB, inputs_IR)
           outputs = activation(outputs)
           labels = data['label'].double()
