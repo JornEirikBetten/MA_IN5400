@@ -67,6 +67,8 @@ class TwoNetworks(nn.Module):
         # And return the result.
         net1 = self.fully_conv1(inputs1)
         net2 = self.fully_conv2(inputs2)
+        print("Shape net 1: ", net1.shape)
+        print("Shape net 2: ", net2.shape)
 
         net = torch.cat((net1, net2), axis=0)
         output = self.linear(net)
