@@ -22,7 +22,7 @@ from sklearn import preprocessing
 
 from typing import Callable, Optional
 from RainforestDataset import RainforestDataset, ChannelSelect
-from YourNetwork import SingleNetwork
+from YourNetwork import SingleNetwork, TwoNetworks
 from torchvision.models import resnet18
 import csv
 
