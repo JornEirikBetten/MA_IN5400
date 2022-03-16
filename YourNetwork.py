@@ -70,7 +70,7 @@ class TwoNetworks(nn.Module):
         print("Shape net 1: ", net1.shape)
         print("Shape net 2: ", net2.shape)
 
-        net = torch.cat((net1, net2), axis=0)
+        net = torch.cat((net1, net2), axis=1)
         output = self.linear(net)
 
         return output
