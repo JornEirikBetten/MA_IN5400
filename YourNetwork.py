@@ -66,10 +66,11 @@ class TwoNetworks(nn.Module):
         # of the two networks that you initialised above, and then
         # concatenate the features before the linear layer.
         # And return the result.
+        input_size = inputs1.shape[0]
         net1 = self.fully_conv1(inputs1)
         net2 = self.fully_conv2(inputs2)
-        net1 = torch.reshape(net1, (16, 512))
-        net2 = torch.reshape(net2, (16, 512))
+        net1 = torch.reshape(net1, (input_size, 512))
+        net2 = torch.reshape(net2, (input_size, 512))
 
         net = torch.cat((net1, net2), axis=1)
         output = self.linear(net)
