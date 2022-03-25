@@ -355,7 +355,10 @@ def runstuff(): # Single net, 3 channels
           transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
       ]),
   }
-
+  """
+  PATH: give relative path after dirname
+  The gpu_path is the path used on the ML-node.
+  """
   dirname = os.getcwd()
   main_path = dirname + "/rainforest"
   gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
@@ -496,6 +499,11 @@ def runstuff3(): # Two nets, 4 channels kaiminghe
           transforms.Normalize([0.7476, 0.6534, 0.4757, 0.0960], [0.1677, 0.1828, 0.2137, 0.0284])
       ]),
   }
+
+  """
+  PATH: give relative path after dirname
+  The gpu_path is the path used on the ML-node.
+  """
 
   dirname = os.getcwd()
   main_path = dirname + "/rainforest"
@@ -641,6 +649,11 @@ def runstuff4(): # Single net, 4 channels kaiming-he
       ]),
   }
 
+  """
+  PATH: give relative path after dirname
+  The gpu_path is the path used on the ML-node.
+  """
+
   dirname = os.getcwd()
   main_path = dirname + "/rainforest"
   gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
@@ -743,8 +756,89 @@ def runstuff4(): # Single net, 4 channels kaiming-he
   file_fnames.close()
 
 
+def reproduction_routine():
+    config = dict()
+    config['use_gpu'] = True #True #TODO change this to True for training on the cluster
+    config['lr'] = 0.01
+    config['batchsize_train'] = 16
+    config['batchsize_val'] = 34
+    config['maxnumepochs'] = 2
+    config['scheduler_stepsize'] = 2
+    config['scheduler_factor'] = 0.3
+
+    # This is a dataset property.
+    config['numcl'] = 17
+    seed = 20001
+    if config['use_gpu'] == True:
+        torch.cuda.manual_seed_all(seed)
+    else:
+        torch.manual_seed_all(seed)
+
+
+
+    # Data augmentations.
+    data_transforms = {
+        'train': transforms.Compose([
+            transforms.Resize(256),
+            transforms.RandomCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            ChannelSelect(channels=[0, 1, 2, 3]),
+            transforms.Normalize([0.7476, 0.6534, 0.4757, 0.0960], [0.1677, 0.1828, 0.2137, 0.0284])
+        ]),
+        'val': transforms.Compose([
+            transforms.Resize(224),
+            transforms.CenterCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            ChannelSelect(channels=[0, 1, 2, 3]),
+            transforms.Normalize([0.7476, 0.6534, 0.4757, 0.0960], [0.1677, 0.1828, 0.2137, 0.0284])
+        ]),
+    }
+
+    irname = os.getcwd()
+    main_path = dirname + "/rainforest"
+    gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
+    print(main_path)
+
+
+    # Device
+    if True == config['use_gpu']:
+        device= torch.device('cuda:0')
+        path = gpu_path
+    else:
+        device= torch.device('cpu')
+        path = main_path
+    # Datasets
+    image_datasets={}
+    #image_datasets['train']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=0, transform=data_transforms['train'])
+    #image_datasets['val']=dataset_voc(root_dir='/itf-fi-ml/shared/IN5400/dataforall/mandatory1/',trvaltest=1, transform=data_transforms['val'])
+    image_datasets['train']=RainforestDataset(root_dir=path,trvaltest=0, transform=data_transforms['train'])
+    image_datasets['val']=RainforestDataset(root_dir=path,trvaltest=1, transform=data_transforms['val'])
+    # Dataloaders
+    #TODO use num_workers=1
+    dataloaders = {}
+    dataloaders['train'] = DataLoader(image_datasets['train'], batch_size=config['batchsize_train'], shuffle=True)
+    dataloaders['val'] = DataLoader(image_datasets['val'], batch_size=config['batchsize_val'], shuffle=False)
+
+
+    # Load model
+    weights = "best_weights_single_net_3_channels.pt" # What weights to run evaluation on.
+    path_to_weights = dir + "/delivery/" + weights
+    model = torch.load(path_to_weights)
+    model = model.to(device)
+    lossfct = yourloss()
+
+    ap_scores, loss, lbls, preds, fnames = evaluate_meanavgprecision(model, dataloaders['val'], lossfct, device, config['numcl'])
+
+    print("Val mAP: ", np.mean(ap_scores))
+    print("Val loss: ", loss)
+
+
+
 if __name__=='__main__':
 
   #runstuff() # Single net, 3 channels
   #runstuff3() # Two nets, 4 channels
-  runstuff4() # Single net, 4 channels kaiming-he initialization
+  #runstuff4() # Single net, 4 channels kaiming-he initialization
+  reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
