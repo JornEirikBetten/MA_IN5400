@@ -826,8 +826,8 @@ def reproduction_routine():
     weights = "best_weights_single_net_3_channels.pt" # What weights to run evaluation on.
     path_to_weights = dirname + "/delivery/best_weights/" + weights
     model = resnet18(pretrained=True)
-    model = torch.load(path_to_weights)
-    model = model.to(device)
+    model.load_state_dict(torch.load(path_to_weights))
+    model.to(device)
     lossfct = yourloss()
 
     ap_scores, loss, lbls, preds, fnames = evaluate_meanavgprecision(model, dataloaders['val'], lossfct, device, config['numcl'])
