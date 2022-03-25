@@ -824,7 +824,7 @@ def reproduction_routine():
 
     # Load model
     weights = "best_weights_single_net_3_channels.pt" # What weights to run evaluation on.
-    path_to_weights = dir + "/delivery/" + weights
+    path_to_weights = dir + "/delivery/best_weights/" + weights
     model = torch.load(path_to_weights)
     model = model.to(device)
     lossfct = yourloss()
