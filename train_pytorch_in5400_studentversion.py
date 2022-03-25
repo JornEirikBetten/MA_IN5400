@@ -843,7 +843,7 @@ def reproduction_routine():
 
 if __name__=='__main__':
 
-  #runstuff() # Single net, 3 channels
+  runstuff() # Single net, 3 channels
   #runstuff3() # Two nets, 4 channels
   #runstuff4() # Single net, 4 channels kaiming-he initialization
-  reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
+  #reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
