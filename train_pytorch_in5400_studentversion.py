@@ -185,7 +185,7 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
           inputs = data['image'].to(device).double()
           outputs = model(inputs)
           outputs = activation(outputs)
-          print(max(outputs))
+          print(torch.max(outputs))
           labels = data['label'].double()
           #print(labels)
           loss = criterion(outputs, labels.to(device))
