@@ -138,7 +138,7 @@ def evaluate_meanavgprecision_twoNets(model, dataloader, criterion, device, numc
           outputs = model(inputs_RGB, inputs_IR)
           outputs = activation(outputs)
           labels = data['label'].double()
-          loss = criterion(outputs, labels.to(device))
+          loss = criterion(outputs.double(), labels.to(device))
           losses.append(loss.item())
 
           # This was an accuracy computation
@@ -843,7 +843,7 @@ def reproduction_routine():
 
 if __name__=='__main__':
 
-  runstuff() # Single net, 3 channels
+  #runstuff() # Single net, 3 channels
   #runstuff3() # Two nets, 4 channels
   #runstuff4() # Single net, 4 channels kaiming-he initialization
-  #reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
+  reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
