@@ -187,6 +187,7 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
           outputs = activation(outputs)
           labels = data['label'].double()
           loss = criterion(outputs, labels.to(device))
+          print(loss)
           losses.append(loss.item())
 
           # This was an accuracy computation
