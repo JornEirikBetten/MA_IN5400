@@ -187,6 +187,7 @@ def evaluate_meanavgprecision(model, dataloader, criterion, device, numcl):
           outputs = activation(outputs)
           print("Shape outputs: ", outputs.shape)
           print("max outputs: ", torch.max(outputs))
+          print("min outputs: ", torch.min(outputs))
           labels = data['label'].double()
           print("Shape labels: ", labels.shape)
           #print(labels)
