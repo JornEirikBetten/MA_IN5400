@@ -827,7 +827,7 @@ def reproduction_routine():
     path_to_weights = dirname + "/delivery/best_weights/" + weights
     pretrained_net = resnet18(pretrained=True)# TwoNetworks()
     model = SingleNetwork(pretrained_net)
-    model.load_state_dict(torch.load(path_to_weights))
+    model.load_state_dict(torch.load(path_to_weights, map_location="cuda:0"))
     model.to(device)
     lossfct = yourloss()
 
