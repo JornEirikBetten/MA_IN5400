@@ -834,7 +834,7 @@ def reproduction_routine():
     model.to(device)
     lossfct = yourloss()
 
-    ap_scores, loss, lbls, preds, fnames = evaluate_meanavgprecision(model, dataloaders['val'], lossfct, device, config['numcl'])
+    ap_scores, loss, lbls, preds, fnames = evaluate_meanavgprecision(model, dataloaders['val'], criterion = lossfct, device = device, numcl = config['numcl'])
 
     print("Val mAP: ", np.mean(ap_scores))
     print("Val loss: ", loss)
@@ -843,7 +843,7 @@ def reproduction_routine():
 
 if __name__=='__main__':
 
-  runstuff() # Single net, 3 channels
+  #runstuff() # Single net, 3 channels
   #runstuff3() # Two nets, 4 channels
   #runstuff4() # Single net, 4 channels kaiming-he initialization
-  #reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
+  reproduction_routine() # reproduction routine (edit weights in reproduction_routine to validate other weights)
