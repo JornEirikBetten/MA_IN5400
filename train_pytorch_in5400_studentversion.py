@@ -93,6 +93,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         inputs = data['image'].to(device)
         target = data['label'].to(device)
         target = target.double()
+        print(target)
         prediction = model(inputs)
         prediction = activation(prediction)
         prediction = prediction.double()
