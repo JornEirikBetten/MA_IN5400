@@ -97,7 +97,7 @@ def train_epoch(model, trainloader, criterion, device, optimizer):
         prediction = activation(prediction)
         prediction = prediction.double()
         loss = criterion(prediction, target)
-        #print(loss)
+        print(loss)
         loss.backward()
         optimizer.step()
         losses.append(loss.item())
