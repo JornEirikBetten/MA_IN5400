@@ -796,7 +796,7 @@ def reproduction_routine():
         ]),
     }
 
-    irname = os.getcwd()
+    dirname = os.getcwd()
     main_path = dirname + "/rainforest"
     gpu_path = "/itf-fi-ml/shared/IN5400/2022_mandatory1/"
     print(main_path)
@@ -824,7 +824,7 @@ def reproduction_routine():
 
     # Load model
     weights = "best_weights_single_net_3_channels.pt" # What weights to run evaluation on.
-    path_to_weights = dir + "/delivery/best_weights/" + weights
+    path_to_weights = dirname + "/delivery/best_weights/" + weights
     model = torch.load(path_to_weights)
     model = model.to(device)
     lossfct = yourloss()
